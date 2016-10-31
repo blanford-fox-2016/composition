@@ -1,4 +1,5 @@
 var _ = require('lodash')
+var R = require('ramda')
 
 
 // Curried functions are easy to compose.
@@ -46,7 +47,9 @@ var articles = [
 // articles using only get, _.flow, and
 // _.map.
 
-var names = _.identity; // change this
+var names = function(articles) {
+  return R.map(x => x.author.name, articles)
+};
 
 assertEqualArrays(
     ['Debbie Downer', 'Caspar Milquetoast'],
@@ -60,7 +63,11 @@ assertEqualArrays(
 // Use the names function you wrote above
 // with _.flow and _.contains.
 
-var isAuthor = _.identity; // change this
+var isAuthor = function(name, articles) {
+  var arrName = R.map(x => x.author.name, articles);
+  return R.contains(name, arrName);
+};
+
 assertEqual(
   false,
   isAuthor('New Guy', articles)
